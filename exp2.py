@@ -13,4 +13,4 @@ from pyope.ope import OPE, ValueRange
 cipher = OPE(b'long key' * 2, in_range=ValueRange(-100, 100),
                               out_range=ValueRange(0, 9999))
 assert 0 < cipher.encrypt(10) < cipher.encrypt(42) < 9999
-print("sdsffs")
+
