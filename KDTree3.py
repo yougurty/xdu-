@@ -22,21 +22,21 @@ class decisionnode:
 #     x=array(x)
 #     return x
 # # 读入处理txt文件
-# def LoadTxtMethod2(filename):  # 传入形参,txt的名字.
-#
-#     result =list()  # 创建要返回的数据.
-#     for line in open(filename):  # 逐行打开文档.
-#         # line = line.strip()  # 去除这一行的头和尾部空格
-#         data =line.split(' ' ,1)  # 切片的运算,以逗号为分隔,隔成两个
-#         # print('data[0]:' +data[0]+",data[1]"+data[0])
-#         data[0] = float(data[0])
-#         data[1] = float(data[1])
-#
-#         # print(type(data[0]))
-#         data_float =np.array(data)  # 转化数据格式
-#         # print(data_float[0])
-#         result.append(data_float)  # 把第一列数据添加到result序列中
-#     return array(result)
+def LoadTxtMethod2(filename):  # 传入形参,txt的名字.
+
+    result =list()  # 创建要返回的数据.
+    for line in open(filename):  # 逐行打开文档.
+        # line = line.strip()  # 去除这一行的头和尾部空格
+        data =line.split(' ' ,1)  # 切片的运算,以逗号为分隔,隔成两个
+        # print('data[0]:' +data[0]+",data[1]"+data[0])
+        data[0] = float(data[0])
+        data[1] = float(data[1])
+
+        # print(type(data[0]))
+        data_float =np.array(data)  # 转化数据格式
+        # print(data_float[0])
+        result.append(data_float)  # 把第一列数据添加到result序列中
+    return array(result)
 
 # 读入处理txt文件,返回二维数组，明文和密文
 # def LoadTxtMethod2(filename):  # 传入形参,txt的名字.
@@ -108,25 +108,66 @@ def traveltree(node,aim):
                 traveltree(node.lb,aim)
     return pointlist
 def dist(x1, x2): #欧式距离的计算
+    # print(type(x1))
+    # print(x2)
+
     return ((np.array(x1) - np.array(x2)) ** 2).sum() ** 0.5
 
+
+cipher = OPE(b'long key' * 2, in_range=ValueRange(0, 10000000),
+                 out_range=ValueRange(0, 100000000))
+# 保序加密
+def encryption(point):
+    # cipher = OPE(b'long key' * 2, in_range=ValueRange(0, 10000000),
+    #              out_range=ValueRange(0, 100000000))
+    print(type(point))
+    point[0] = float(point[0])
+    point[1] = float(point[1])          #把array中的点转化为float类型
+    en_point = []
+    en_point.append(cipher.encrypt(int(point[0] * 1000000)))
+    en_point.append(cipher.encrypt(int(point[1] * 1000000)))
+    en_point_arr = np.array(en_point)  # 转化数据格式
+
+    return en_point_arr
+#保序解密
+def decryption(point):
+    point[0] = int(point[0])
+    point[1] = int(point[1])
+    de_point = []
+    de_point.append(cipher.decrypt(point[0])/1000000)
+    de_point.append(cipher.decrypt(point[1])/1000000)
+    # print(de_point)
+    de_point_arr = np.array(de_point)
+
+    return de_point_arr
+
 knears={}
-k=int(input('请输入k的值'))
-if k<2: print('k不能是1')
+k = int(input('请输入k的值'))
+if k < 2: print('k不能是1')
 global pointlist
-pointlist=[]
-file='NE.txt'
+pointlist = []
+file = 'cipherText.txt'
 # data_m, data_c=LoadTxtMethod2(file)
-data_c=LoadTxtMethod2(file)
+data_c = LoadTxtMethod2(file)
 print(len(data_c))
-tree=buildtree(data_c)
-tmp=input('请输入目标点')
-tmp=tmp.split(',')
-aim=[]
-for num in tmp:
-     num=float(num)
-     aim.append(num)
-aim=tuple(aim)
-pointlist=traveltree(tree,aim)
+tree = buildtree(data_c)
+
+tmp = input('请输入目标点')
+tmp = tmp.split(',')
+point_tmp = encryption(tmp)
+aim = []
+for num in point_tmp:
+     aim.append(num)            #aim里面是目标点经过加密之后的
+
+aim = tuple(aim)
+pointlist = traveltree(tree , aim)
+
+#output
+print(tmp)
 for point in pointlist[-k:]:
-     print(point)
+     x = []
+     x.append(point[0][0])
+     x.append(point[0][1])
+     de_point = decryption(x)
+     print(de_point)
+     print("欧式距离为：",dist(tmp , de_point))
