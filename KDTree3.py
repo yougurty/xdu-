@@ -120,7 +120,7 @@ cipher = OPE(b'long key' * 2, in_range=ValueRange(0, 10000000),
 def encryption(point):
     # cipher = OPE(b'long key' * 2, in_range=ValueRange(0, 10000000),
     #              out_range=ValueRange(0, 100000000))
-    print(type(point))
+    # print(type(point))
     point[0] = float(point[0])
     point[1] = float(point[1])          #把array中的点转化为float类型
     en_point = []
@@ -163,11 +163,11 @@ aim = tuple(aim)
 pointlist = traveltree(tree , aim)
 
 #output
-print(tmp)
+print("输入的点为 " , tmp)
 for point in pointlist[-k:]:
      x = []
      x.append(point[0][0])
      x.append(point[0][1])
      de_point = decryption(x)
-     print(de_point)
-     print("欧式距离为：",dist(tmp , de_point))
+     print("检索得到的点为 " , de_point)
+     print("欧式距离为：", dist(tmp , de_point))
