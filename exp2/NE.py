@@ -3,7 +3,6 @@ import numpy as np
 from numpy import array
 from pyope.ope import OPE, ValueRange
 def LoadTxtMethod1(filename):  # 传入形参,txt的名字.
-
     result =list()  # 创建要返回的数据.
     for line in open(filename):  # 逐行打开文档.
         # line = line.strip()  # 去除这一行的头和尾部空格
@@ -51,5 +50,5 @@ def WriteTxt(cipher_txt):
 if __name__ == "__main__":
     data1,data2 = LoadTxtMethod2('NE.txt')  # 调用上面数据处理程序
     # data2 = LoadTxtMethod1('NE.txt')
-    WriteTxt(data2)
+    WriteTxt(data2)                         #加密之后的数据存放于cipherText.txt中
 
